@@ -48,7 +48,7 @@ export default function SetPasswordPage() {
       setMessage("Паролата е сменена успешно!");
       
       const { data: { user } } = await supabase.auth.getUser();
-      setUserData({ email: user.email, id: user.id, role: "teacher", lessons: [] }); // <--- тук пазиш логнатия потребител в контекста
+      setUserData({ email: user.email, id: user.id, role: "teacher", lessons: [] });
     }
 
     const { error: insertError } = await supabase.from("profiles").insert({
@@ -56,7 +56,7 @@ export default function SetPasswordPage() {
       email: userData?.email || "",
       role: "teacher",
       lessons: []
-    })
+    });
 
     if (insertError) {
       setMessage("⚠️ Грешка при запис в профила: " + insertError.message)
@@ -66,7 +66,7 @@ export default function SetPasswordPage() {
     setMessage("✅ Паролата е успешно зададена и профилът е създаден!")
     setTimeout(() => {
       router.push("/login");
-    }, 3000)
+    }, 2000)
   }
 
   return (
