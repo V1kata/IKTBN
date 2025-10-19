@@ -1,11 +1,11 @@
-import { test } from "@/lib/authentication"
+import { setInviteToEmail } from "@/lib/serverRequests"
 
 export default function InvitePage() {
   // Server Action
   async function inviteTeacher(formData) {
     "use server"
     const email = formData.get("email")
-    await test(email);
+    await setInviteToEmail(email);
   }
 
   return (
