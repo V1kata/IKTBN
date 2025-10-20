@@ -15,6 +15,8 @@ try {
 
     await setSession(data.session.access_token, data.session.refresh_token);
 
+    localStorage.setItem("user", JSON.stringify(res.data[0]));
+
     return { ...res.data[0], accessToken: data.session.access_token };
 } catch (err) {
     console.error("Грешка при вход:", err);
@@ -27,7 +29,6 @@ async function setSession(access_token, refresh_token) {
             access_token,
             refresh_token
         });
-        
     } catch (err) {
         console.error('Unexpected error:', err);
         return { error: err };
@@ -89,4 +90,25 @@ async function ensureSession() {
   }
 
   return data.session;
+}
+
+export async function finalizeUserSetup(password, userId) {
+  // Смени паролата
+  const { error: updateError } = await supabase.auth.updateUser({ password });
+  if (updateError) throw new Error(updateError.message);
+
+  // Вземи актуалния user
+  const { data: { user } } = await supabase.auth.getUser();
+
+  // Създай профил
+  const { data, error: insertError } = await supabase.from("profiles").insert({
+    id: userId,
+    email: user?.email || "",
+    role: "teacher",
+    lessons: []
+  }).select();
+
+  if (insertError) throw new Error(insertError.message);
+
+  return data[0];
 }
