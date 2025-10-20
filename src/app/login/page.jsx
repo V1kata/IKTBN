@@ -1,6 +1,6 @@
 "use client";
 import { useUser } from "@/app/context/UserContext";
-import { login } from "@/lib/clientReqeusts";
+import { login } from "@/lib/clientRequests";
 import { useRouter } from "next/navigation";
 export default function Login() {
   const { userData, setUserData } = useUser();
