@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import { supabase } from "@/lib/supabaseClient"
 import { Eye, EyeOff, Lock } from "lucide-react"
 import { useUser } from "@/app/context/UserContext";
+import { finalizeUserSetup, login } from "@/lib/clientRequests"
 
 export default function SetPasswordPage() {
   const { userData, setUserData } = useUser();
@@ -38,35 +39,21 @@ export default function SetPasswordPage() {
   }, [])
 
   async function handleSubmit(e) {
-    e.preventDefault()
-    if (!sessionReady) return setMessage("⚠️ Сесията не е активна.")
-    if (password !== confirmPassword) return setMessage("⚠️ Паролите не съвпадат.")
+    e.preventDefault();
+    if (!sessionReady) return setMessage("⚠️ Сесията не е активна.");
+    if (password !== confirmPassword) return setMessage("⚠️ Паролите не съвпадат.");
 
-    const { error: updateError } = await supabase.auth.updateUser({ password })
-    if (updateError) return setMessage("⚠️ " + updateError.message);
-    else {
-      setMessage("Паролата е сменена успешно!");
-      
-      const { data: { user } } = await supabase.auth.getUser();
-      setUserData({ email: user.email, id: user.id, role: "teacher", lessons: [] });
+    try {
+      const userProfile = await finalizeUserSetup(password, userId);
+      setUserData(userProfile);
+
+      setMessage("✅ Профилът е готов! Влизане...");
+
+      await login(userProfile.email, password);
+      setTimeout(() => router.push("/"), 2000);
+    } catch (err) {
+      setMessage("⚠️ " + err.message);
     }
-
-    const { error: insertError } = await supabase.from("profiles").insert({
-      id: userId,
-      email: userData?.email || "",
-      role: "teacher",
-      lessons: []
-    });
-
-    if (insertError) {
-      setMessage("⚠️ Грешка при запис в профила: " + insertError.message)
-      return
-    }
-
-    setMessage("✅ Паролата е успешно зададена и профилът е създаден!")
-    setTimeout(() => {
-      router.push("/login");
-    }, 2000)
   }
 
   return (
