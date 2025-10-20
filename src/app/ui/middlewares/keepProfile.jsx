@@ -12,6 +12,7 @@ export default function KeepProfile({ children }) {
     if (user && !userData) {
       setUserData(user);
     } else if (!user && userData) {
+      sessionStorage.setItem("user", JSON.stringify(userData));
       localStorage.setItem("user", JSON.stringify(userData));
     }
   }, [userData, setUserData]);

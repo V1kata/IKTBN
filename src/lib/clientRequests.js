@@ -1,26 +1,26 @@
 import { supabase } from "@/lib/supabaseClient";
 
 export async function login(email, password) {
-try {
-    const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password
-    });
-    if (error) throw error;
+    try {
+        const { data, error } = await supabase.auth.signInWithPassword({
+            email,
+            password
+        });
+        if (error) throw error;
 
-    const userId = data.user.id;
-    const res = await supabase.from("profiles").select().eq("id", userId);
+        const userId = data.user.id;
+        const res = await supabase.from("profiles").select().eq("id", userId);
 
-    if (res.error) throw res.error;
+        if (res.error) throw res.error;
 
-    await setSession(data.session.access_token, data.session.refresh_token);
+        await setSession(data.session.access_token, data.session.refresh_token);
 
-    localStorage.setItem("user", JSON.stringify(res.data[0]));
+        localStorage.setItem("user", JSON.stringify(res.data[0]));
 
-    return { ...res.data[0], accessToken: data.session.access_token };
-} catch (err) {
-    console.error("Грешка при вход:", err);
-}
+        return { ...res.data[0], accessToken: data.session.access_token };
+    } catch (err) {
+        console.error("Грешка при вход:", err);
+    }
 }
 
 async function setSession(access_token, refresh_token) {
@@ -62,18 +62,18 @@ export async function getCurrentUser(user_id) {
     }
 }
 
-export async function logoutUser(userId) {
+export async function logoutUser(setUserData) {
     try {
-        await makeUserOffline(userId);
-
         const { error } = await supabase.auth.signOut();
 
         if (error) {
             throw error;
         }
 
-        localStorage.removeItem('sb-mbzfehmethzunbrrpxls-auth-token');
-        sessionStorage.removeItem('sb-mbzfehmethzunbrrpxls-auth-token');
+        localStorage.clear();
+        sessionStorage.clear();
+        setUserData(null);
+
         return;
     } catch (err) {
         console.error('Unexpected error:', err);
@@ -82,33 +82,33 @@ export async function logoutUser(userId) {
 }
 
 async function ensureSession() {
-  const { data, error } = await supabase.auth.getSession();
+    const { data, error } = await supabase.auth.getSession();
 
-  if (error || !data.session) {
-    const { data: refreshed } = await supabase.auth.refreshSession();
-    return refreshed.session;
-  }
+    if (error || !data.session) {
+        const { data: refreshed } = await supabase.auth.refreshSession();
+        return refreshed.session;
+    }
 
-  return data.session;
+    return data.session;
 }
 
 export async function finalizeUserSetup(password, userId) {
-  // Смени паролата
-  const { error: updateError } = await supabase.auth.updateUser({ password });
-  if (updateError) throw new Error(updateError.message);
+    // Смени паролата
+    const { error: updateError } = await supabase.auth.updateUser({ password });
+    if (updateError) throw new Error(updateError.message);
 
-  // Вземи актуалния user
-  const { data: { user } } = await supabase.auth.getUser();
+    // Вземи актуалния user
+    const { data: { user } } = await supabase.auth.getUser();
 
-  // Създай профил
-  const { data, error: insertError } = await supabase.from("profiles").insert({
-    id: userId,
-    email: user?.email || "",
-    role: "teacher",
-    lessons: []
-  }).select();
+    // Създай профил
+    const { data, error: insertError } = await supabase.from("profiles").insert({
+        id: userId,
+        email: user?.email || "",
+        role: "teacher",
+        lessons: []
+    }).select();
 
-  if (insertError) throw new Error(insertError.message);
+    if (insertError) throw new Error(insertError.message);
 
-  return data[0];
+    return data[0];
 }
