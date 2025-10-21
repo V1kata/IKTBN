@@ -5,5 +5,5 @@ export const TABLES = {
 };
 
 export const BUCKETS = {
-  LESSON_FILES: "lesson-files",
+  LESSON_FILES: "lessonMaterials",
 };
