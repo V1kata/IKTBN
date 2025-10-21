@@ -6,7 +6,7 @@ export const navLinks = [
     { href: "/contact", label: "Контакти", access: "all" },
     { href: "/requestForTeacher", label: "Заяви учител", access: "unloged" },
     { href: "/myLessons", label: "Моите уроци", access: "teacher" },
-    { href: "/createLesson", label: "Създай урок", access: "teacher" },
+    { href: "/content/create-lesson", label: "Създай урок", access: "teacher" },
     { href: "/teacherRequests", label: "Заявки за учител", access: "admin" },
     { href: "/auth/login", label: "Вход", access: "unloged" },
     { href: "/profile", label: "Профил", access: "loged", icon: <User size={18} /> },
