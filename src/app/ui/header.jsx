@@ -2,8 +2,12 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Menu, X, LogOut, User } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useUser } from "@/app/context/UserContext";
+import DesktopNavLink from "@/app/ui/desktop/DesktopNavLink";
+import MobileNavLink from "@/app/ui/mobile/MobileNavLink";
+import { canAccess } from "@/utils/access";
+import { navLinks } from "@/utils/navLinks";
 
 export default function Header() {
   const { userData } = useUser();
@@ -12,27 +16,7 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const toggleMenu = () => setMenuOpen(!menuOpen);
 
-  const navLinks = [
-    { href: "/", label: "Начало", access: "all" },
-    { href: "/content/classes", label: "Уроци", access: "all" },
-    { href: "/contact", label: "Контакти", access: "all" },
-    { href: "/requestForTeacher", label: "Заяви учител", access: "unloged" },
-    { href: "/myLessons", label: "Моите уроци", access: "teacher" },
-    { href: "/createLesson", label: "Създай урок", access: "teacher" },
-    { href: "/teacherRequests", label: "Заявки за учител", access: "admin" },
-    { href: "/auth/login", label: "Вход", access: "unloged" },
-    { href: "/profile", label: "Профил", access: "loged", icon: <User size={18} /> },
-    { href: "/auth/logout", label: "Изход", access: "loged", icon: <LogOut size={18} /> },
-  ];
-
-  const visibleLinks = navLinks.filter(link => {
-    if (link.access === "all") return true;
-    if (link.access === "unloged" && role === "unloged") return true;
-    if (link.access === "loged" && role !== "unloged") return true;
-    if (link.access === "teacher" && role === "teacher") return true;
-    if (link.access === "admin" && role === "admin") return true;
-    return false;
-  });
+  const visibleLinks = navLinks.filter(link => canAccess(role, link.access));
 
   return (
     <header className="bg-white shadow-md sticky top-0 z-50">
@@ -47,14 +31,7 @@ export default function Header() {
         {/* Навигация (desktop) */}
         <nav className="hidden md:flex space-x-8 text-lg">
           {visibleLinks.map(({ href, label, icon }) => (
-            <Link
-              key={href}
-              href={href}
-              className="flex items-center gap-2 text-gray-700 hover:text-red-700 transition font-medium"
-            >
-              {icon && <span className="text-red-600">{icon}</span>}
-              {label}
-            </Link>
+            <DesktopNavLink key={href} href={href} label={label} icon={icon} />
           ))}
         </nav>
 
@@ -74,14 +51,7 @@ export default function Header() {
           <ul className="flex flex-col items-center py-4 space-y-3">
             {visibleLinks.map(({ href, label, icon }) => (
               <li key={href}>
-                <Link
-                  href={href}
-                  className="flex items-center gap-2 text-gray-700 text-lg hover:text-red-700 transition"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  {icon && <span className="text-red-600">{icon}</span>}
-                  {label}
-                </Link>
+                <MobileNavLink href={href} label={label} icon={icon} setMenuOpen={setMenuOpen} />
               </li>
             ))}
           </ul>
