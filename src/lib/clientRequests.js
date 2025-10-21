@@ -1,4 +1,6 @@
 import { supabase } from "@/lib/supabaseClient";
+import { TABLES } from "@/utils/constants";
+import { ROLES } from "@/utils/roles";
 
 export async function login(email, password) {
     try {
@@ -9,7 +11,7 @@ export async function login(email, password) {
         if (error) throw error;
 
         const userId = data.user.id;
-        const res = await supabase.from("profiles").select().eq("id", userId);
+        const res = await supabase.from(TABLES.PROFILES).select().eq("id", userId);
 
         if (res.error) throw res.error;
 
@@ -51,7 +53,7 @@ export async function getSession() {
 export async function getCurrentUser(user_id) {
     try {
         const { data, error } = await supabase
-            .from('user_profiles')
+            .from(TABLES.PROFILES)
             .eq('id', user_id)
             .select('*');
 
@@ -93,18 +95,15 @@ async function ensureSession() {
 }
 
 export async function finalizeUserSetup(password, userId) {
-    // Смени паролата
     const { error: updateError } = await supabase.auth.updateUser({ password });
     if (updateError) throw new Error(updateError.message);
 
-    // Вземи актуалния user
     const { data: { user } } = await supabase.auth.getUser();
 
-    // Създай профил
-    const { data, error: insertError } = await supabase.from("profiles").insert({
+    const { data, error: insertError } = await supabase.from(TABLES.PROFILES).insert({
         id: userId,
         email: user?.email || "",
-        role: "teacher",
+        role: ROLES.TEACHER,
         lessons: []
     }).select();
 

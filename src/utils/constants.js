@@ -1,5 +1,5 @@
 export const TABLES = {
-  USERS: "users",
+  PROFILES: "profiles",
   LESSONS: "lessons",
   REQUESTS: "teacher_requests",
 };
