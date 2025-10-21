@@ -18,7 +18,7 @@ export default async function LessonPage({ params }) {
 
   return (
     <article className="max-w-4xl mx-auto py-10">
-      <Link href={`/class/${grade}`} className="text-red-600 hover:underline">
+      <Link href={`/content/class/${grade}`} className="text-red-600 hover:underline">
         ← Назад към {grade} клас
       </Link>
 

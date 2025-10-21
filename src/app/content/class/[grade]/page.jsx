@@ -21,7 +21,7 @@ export default async function ClassPage({ params }) {
         {lessons.map((lesson) => (
           <Link
             key={lesson.id}
-            href={`/lesson/${lesson.id}`}
+            href={`/content/lesson/${lesson.id}`}
             className="bg-white shadow-md rounded-2xl overflow-hidden hover:shadow-lg transition"
           >
             <img

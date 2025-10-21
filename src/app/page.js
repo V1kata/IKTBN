@@ -3,6 +3,7 @@ import Link from "next/link";
 
 export default function Home() {
   const classes = [
+    { grade: 5, color: "bg-teal-600" },
     { grade: 6, color: "bg-blue-600" },
     { grade: 7, color: "bg-green-600" },
     { grade: 8, color: "bg-yellow-600" },
@@ -18,11 +19,11 @@ export default function Home() {
         Избери клас, за да разгледаш уроците и материалите.
       </p>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-6 max-w-4xl mx-auto">
         {classes.map(({ grade, color }) => (
           <Link
             key={grade}
-            href={`/class/${grade}`}
+            href={`/content/class/${grade}`}
             className={`${color} text-white py-8 rounded-2xl text-2xl font-semibold hover:opacity-90 transition`}
           >
             {grade} клас
