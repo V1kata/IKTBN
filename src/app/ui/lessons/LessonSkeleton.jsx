@@ -94,7 +94,7 @@ export function LessonSkeleton({ lesson }) {
                             </div>
 
                             {/* Списък файлове */}
-                            <ModalFilesShow files={files} />
+                            <ModalFilesShow files={files} downloadOrOpen={downloadOrOpen} />
                         </div>
                     </div>
                 )}

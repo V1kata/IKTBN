@@ -1,4 +1,4 @@
-export function ModalFilesShow({ files }) {
+export function ModalFilesShow({ files, downloadOrOpen }) {
     return (
         <>
             {files.length === 0 ? (
