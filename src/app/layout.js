@@ -1,7 +1,7 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Footer from "./ui/Footer";
-import Header from "./ui/Header";
+import Footer from "@/app/ui/Footer";
+import Header from "@/app/ui/Header";
 import { UserProvider } from "@/app/context/UserContext";
 import KeepProfile from "./ui/middlewares/keepProfile";
 
