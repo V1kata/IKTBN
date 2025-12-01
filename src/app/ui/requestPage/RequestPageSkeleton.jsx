@@ -1,14 +1,24 @@
 "use client";
 
-import { acceptOrDeclineTeacher } from "@/lib/clientRequests";
+import { acceptOrDeclineRequest } from "@/lib/clientRequests";
 import { useRouter } from "next/navigation";
 
-export default function RequestItem({ teacher }) {
+export function RequestPageSkeleton({ teacher }) {
   const router = useRouter();
 
   async function handleClick(action) {
-    await acceptOrDeclineTeacher(teacher.id, action);
-    router.refresh();
+      if (action === "accepted") {
+        // викаме server route, който прави invite чрез supabaseAdmin
+        await fetch("/api/invite-teacher", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: teacher.email, action })
+        });
+      }
+
+      // след това актуализираме таблицата client-side
+      // await acceptOrDeclineRequest(teacher.email, action);
+      router.refresh();
   }
 
   return (

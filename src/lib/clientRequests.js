@@ -139,33 +139,15 @@ export async function getAllRequestedTeachers() {
     }
 }
 
-export async function acceptOrDeclineRequest(status, email) {
+export async function acceptOrDeclineRequest(email, status) {
     try {
         const { data, error } = await supabase
             .from(TABLES.REQUESTS)
             .update({ status })
             .eq('email', email);
-
-        if (status == 'accepted') {
-            const { data, error } = await supabaseAdmin.auth.admin.inviteUserByEmail(email, {
-                redirectTo: "https://iktbn.vercel.app/set-password"
-            });
-            if (error) throw error;
-        }
-        return data[0];
+        return data;
     } catch (err) {
         console.error('Unexpected error:', err);
         return { error: err };
-    }
-}
-
-async function setInviteToEmail(email) {
-    try {
-        const { data, error } = await supabaseAdmin.auth.admin.inviteUserByEmail(email, {
-            redirectTo: "http://localhost:3000/set-password"
-        });
-        if (error) throw error;
-    } catch (err) {
-        console.error("Грешка при покана:", err);
     }
 }

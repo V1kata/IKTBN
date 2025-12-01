@@ -6,7 +6,7 @@ export default async function RequestTeacherAdminPage() {
 
     return (
         <>
-            {teachers?.length > 0 && teachers.map((t, i) => <RequestPageSkeleton key={i} teacher={t} buttonClick={buttonClick} />)}
+            {teachers?.length > 0 && teachers.map((t, i) => <RequestPageSkeleton key={i} teacher={t} />)}
         </>
     )
 }
