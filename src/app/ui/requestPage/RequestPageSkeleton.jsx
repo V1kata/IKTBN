@@ -17,7 +17,7 @@ export function RequestPageSkeleton({ teacher }) {
       }
 
       // след това актуализираме таблицата client-side
-      // await acceptOrDeclineRequest(teacher.email, action);
+      await acceptOrDeclineRequest(teacher.email, action);
       router.refresh();
   }
 
