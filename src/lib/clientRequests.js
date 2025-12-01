@@ -111,3 +111,61 @@ export async function finalizeUserSetup(password, userId) {
 
     return data[0];
 }
+
+export async function requestTeacher(email) {
+    try {
+        const { data, error } = await supabase
+            .from(TABLES.REQUESTS)
+            .insert({ email });
+
+        return data[0];
+    } catch (err) {
+        console.error('Unexpected error:', err);
+        return { error: err };
+    }
+}
+
+export async function getAllRequestedTeachers() {
+    try {
+        const { data, error } = await supabase
+            .from(TABLES.REQUESTS)
+            .select('*')
+            .eq('status', 'pending');
+
+        return data;
+    } catch (err) {
+        console.error('Unexpected error:', err);
+        return { error: err };
+    }
+}
+
+export async function acceptOrDeclineRequest(status, email) {
+    try {
+        const { data, error } = await supabase
+            .from(TABLES.REQUESTS)
+            .update({ status })
+            .eq('email', email);
+
+        if (status == 'accepted') {
+            const { data, error } = await supabaseAdmin.auth.admin.inviteUserByEmail(email, {
+                redirectTo: "https://iktbn.vercel.app/set-password"
+            });
+            if (error) throw error;
+        }
+        return data[0];
+    } catch (err) {
+        console.error('Unexpected error:', err);
+        return { error: err };
+    }
+}
+
+async function setInviteToEmail(email) {
+    try {
+        const { data, error } = await supabaseAdmin.auth.admin.inviteUserByEmail(email, {
+            redirectTo: "http://localhost:3000/set-password"
+        });
+        if (error) throw error;
+    } catch (err) {
+        console.error("Грешка при покана:", err);
+    }
+}

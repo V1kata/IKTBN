@@ -1,17 +1,22 @@
-import { setInviteToEmail } from "@/lib/serverRequests";
+"use client";
+
+import { requestTeacher } from "@/lib/clientRequests";
+import { useRouter } from "next/navigation";
 import { Mail, Send } from "lucide-react";
 
 export default function InvitePage() {
-  // Server Action
-  async function inviteTeacher(formData) {
-    "use server"
+  const router = useRouter();
+  async function inviteTeacher(e) {
+    const formData = new FormData(e.target);
     const email = formData.get("email")
-    await setInviteToEmail(email);
+    await requestTeacher(email);
+
+    router.push("/");
   }
 
   return (
     <form
-      action={inviteTeacher}
+      onSubmit={inviteTeacher}
       className="max-w-md mx-auto bg-white p-6 rounded-2xl shadow-lg flex flex-col gap-5"
     >
       <label className="flex flex-col text-gray-700 font-medium">
