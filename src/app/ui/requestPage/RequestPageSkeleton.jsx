@@ -6,19 +6,25 @@ import { useRouter } from "next/navigation";
 export function RequestPageSkeleton({ teacher }) {
   const router = useRouter();
 
-  async function handleClick(action) {
-      if (action === "accepted") {
-        // викаме server route, който прави invite чрез supabaseAdmin
-        await fetch("/api/invite-teacher", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: teacher.email, action })
-        });
-      }
+  console.log(teacher)
 
-      // след това актуализираме таблицата client-side
+  async function handleClick(action) {
+    if (action === "accepted") {
+      // викаме server route, който прави invite чрез supabaseAdmin
+      await fetch("/api/invite-teacher", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: teacher.email, action })
+      });
+    }
+
+    // след това актуализираме таблицата client-side
+    try {
       await acceptOrDeclineRequest(teacher.email, action);
-      router.refresh();
+    } catch (err) {
+      console.error(err);
+    }
+    router.refresh();
   }
 
   return (
