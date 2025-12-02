@@ -3,6 +3,7 @@ import { RequestPageSkeleton } from "@/app/ui/requestPage/RequestPageSkeleton"
 
 export default async function RequestTeacherAdminPage() {
     const teachers = await getAllRequestedTeachers();
+    console.log(teachers)
 
     return (
         <>
