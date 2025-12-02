@@ -3,7 +3,7 @@
 import "./globals.css";
 import { UserProvider } from "@/app/context/UserContext";
 import KeepProfile from "./ui/middlewares/keepProfile";
-// import { Header } from "@/app/ui/Header";
+import { Header } from "./ui/Header";
 // import { Footer } from "@/app/ui/Footer";
 
 export default function RootLayout({ children }) {
@@ -15,7 +15,7 @@ export default function RootLayout({ children }) {
             {/* Декоративен елемент */}
             <div className="absolute inset-0 -z-10 opacity-40 bg-[url('/ornament-bg.svg')] bg-repeat" />
 
-            {/* <Header> </Header > */}
+            <Header> </Header >
 
             <main className="flex-1 w-full relative z-10 px-6 py-10 flex justify-center items-center">
               {/* Декоративен фон */}
