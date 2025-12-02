@@ -3,7 +3,7 @@ import LessonTitleInput from "@/app/ui/createForm/LessonTitleInput";
 import LessonContentTextarea from "@/app/ui/createForm/LessonContentTextarea";
 import FileUploader from "@/app/ui/createForm/FileUploader";
 
-export default function LessonFormComponent({ lessonData, setLessonData, handleSubmit }) {
+export default function LessonFormComponent({ lessonData, setLessonData, handleSubmit, loading }) {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -27,9 +27,14 @@ export default function LessonFormComponent({ lessonData, setLessonData, handleS
 
             <button
                 type="submit"
-                className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
+                disabled={loading}
+                className={`w-full px-4 py-2 rounded text-white transition ${
+                    loading
+                        ? "bg-gray-400 cursor-not-allowed"
+                        : "bg-blue-600 hover:bg-blue-700"
+                }`}
             >
-                Създай урок
+                {loading ? "Качва се..." : "Създай урок"}
             </button>
         </form>
     )

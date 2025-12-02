@@ -6,18 +6,25 @@ export async function createLesson({ grade, title, content, files, userId }) {
         const fileUrls = [];
 
         for (const file of files) {
-            const fileExt = file.name.split(".").pop();
             const fileName = `${Date.now()}_${file.name}`;
-            const { data, error: uploadError } = await supabase.storage.from(BUCKETS.LESSON_FILES)
+
+            const { error: uploadError } = await supabase
+                .storage
+                .from(BUCKETS.LESSON_FILES)
                 .upload(fileName, file);
 
-            if (uploadError) throw uploadError;
+            if (uploadError) {
+                return { success: false, error: uploadError };
+            }
 
-            const { data: publicURL } = supabase.storage.from(BUCKETS.LESSON_FILES).getPublicUrl(fileName);
+            const { data: publicURL } = supabase
+                .storage
+                .from(BUCKETS.LESSON_FILES)
+                .getPublicUrl(fileName);
+
             fileUrls.push(publicURL);
         }
 
-        debugger
         const { data, error } = await supabase
             .from(TABLES.LESSONS)
             .insert([
@@ -28,13 +35,15 @@ export async function createLesson({ grade, title, content, files, userId }) {
                     files: fileUrls,
                     teacherId: userId,
                 },
-            ]);
+            ])
+            .select()
+            .single();
 
-        if (error) throw error;
+        if (error) return { success: false, error };
 
-        return data;
+        return { success: true, data };
     } catch (err) {
         console.error("Error creating lesson:", err);
-        throw err;
+        return { success: false, error: err };
     }
 }
