@@ -126,17 +126,10 @@ export async function requestTeacher(email) {
 }
 
 export async function getAllRequestedTeachers() {
-    try {
-        const { data, error } = await supabase
-            .from(TABLES.REQUESTS)
-            .select('*')
-            .eq('status', 'pending');
-
-        return data;
-    } catch (err) {
-        console.error('Unexpected error:', err);
-        return { error: err };
-    }
+  const res = await fetch("/api/requested-teachers", {
+    cache: "no-store"
+  });
+  return res.json();
 }
 
 export async function acceptOrDeclineRequest(email, status) {
