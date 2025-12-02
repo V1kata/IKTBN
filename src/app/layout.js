@@ -1,16 +1,10 @@
-import { Footer } from "@/app/ui/Footer";
+"use client";
+
 import "./globals.css";
-import { Inter } from "next/font/google";
 import { UserProvider } from "@/app/context/UserContext";
 import KeepProfile from "./ui/middlewares/keepProfile";
 import { Header } from "@/app/ui/Header";
-
-const inter = Inter({ subsets: ["latin"] });
-
-export const metadata = {
-  title: "История, Култура и Традиции на България",
-  description: "Образователен сайт за богатото наследство на България.",
-};
+import { Footer } from "@/app/ui/Footer";
 
 export default function RootLayout({ children }) {
   return (
