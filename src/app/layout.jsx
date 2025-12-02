@@ -3,7 +3,7 @@
 import "./globals.css";
 import { UserProvider } from "@/app/context/UserContext";
 import KeepProfile from "./ui/middlewares/keepProfile";
-import { Header } from "@/app/ui/Header";
+import { Header } from "@/app/ui/StaticFails/Header";
 // import { Footer } from "@/app/ui/Footer";
 
 export default function RootLayout({ children }) {
