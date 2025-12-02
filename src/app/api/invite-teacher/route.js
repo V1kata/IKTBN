@@ -8,7 +8,7 @@ export async function POST(req) {
     debugger
     if (action === "accepted") {
         const { data, error } = await supabaseAdmin.auth.admin.inviteUserByEmail(email, {
-            redirectTo: "http://localhost:3000/auth/set-password"
+            redirectTo: "https://iktbn.vercel.app/auth/set-password"
         });
 
         if (error) {
