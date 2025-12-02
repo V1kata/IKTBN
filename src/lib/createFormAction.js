@@ -22,7 +22,7 @@ export async function createLesson({ grade, title, content, files, userId }) {
                 .from(BUCKETS.LESSON_FILES)
                 .getPublicUrl(fileName);
 
-            fileUrls.push(publicURL);
+            fileUrls.push(publicURL.publicUrl);
         }
 
         const { data, error } = await supabase

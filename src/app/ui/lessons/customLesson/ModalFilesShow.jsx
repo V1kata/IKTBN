@@ -1,4 +1,19 @@
-export function ModalFilesShow({ files, downloadOrOpen }) {
+export function ModalFilesShow({ files }) {
+    const downloadOrOpen = (url, name) => {
+        const isImage = /\.(png|jpg|jpeg|gif|webp|svg)$/i.test(name);
+
+        if (isImage) {
+            // Отваря се в нов таб
+            window.open(url, "_blank", "noopener,noreferrer");
+            return;
+        }
+
+        // За всички други файлове – изтегляне
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = name;
+        a.click();
+    };
     return (
         <>
             {files.length === 0 ? (

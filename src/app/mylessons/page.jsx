@@ -23,7 +23,6 @@ export default function MyLessonsPage() {
                     groupedLessons[grade].push(lesson);
                 }
 
-                debugger
                 setLessonsByGrade(groupedLessons);
             } catch (error) {
                 console.error("Unexpected error:", error);
