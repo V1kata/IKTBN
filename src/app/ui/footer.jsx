@@ -1,4 +1,5 @@
-// app/components/Footer.jsx
+"use client";
+
 export function Footer() {
   return (
     <footer className="bg-white/80 border-t border-gray-200 py-6 text-center text-sm text-gray-600">
