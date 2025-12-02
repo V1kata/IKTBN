@@ -4,7 +4,7 @@ import "./globals.css";
 import { UserProvider } from "@/app/context/UserContext";
 import KeepProfile from "./ui/middlewares/keepProfile";
 import { Header } from "@/app/ui/StaticFails/Header";
-// import { Footer } from "@/app/ui/Footer";
+import { Footer } from "@/app/ui/StaticFails/Footer";
 
 export default function RootLayout({ children }) {
   return (
@@ -32,7 +32,7 @@ export default function RootLayout({ children }) {
               </div>
             </main>
 
-            {/* <Footer /> */}
+            <Footer />
           </KeepProfile>
         </body>
       </UserProvider>
