@@ -83,17 +83,6 @@ export async function logoutUser(setUserData) {
     }
 }
 
-async function ensureSession() {
-    const { data, error } = await supabase.auth.getSession();
-
-    if (error || !data.session) {
-        const { data: refreshed } = await supabase.auth.refreshSession();
-        return refreshed.session;
-    }
-
-    return data.session;
-}
-
 export async function finalizeUserSetup(password, userId) {
     const { error: updateError } = await supabase.auth.updateUser({ password });
     if (updateError) throw new Error(updateError.message);
@@ -126,10 +115,16 @@ export async function requestTeacher(email) {
 }
 
 export async function getAllRequestedTeachers() {
-  const res = await fetch("/api/requested-teachers", {
-    cache: "no-store"
-  });
-  return res.json();
+    try {
+        const { data, error } = await supabase
+            .from(TABLES.REQUESTS)
+            .select("*")
+            .eq("status", "pending");
+        return data;
+    } catch (err) {
+        console.error('Unexpected error:', err);
+        return { error: err };
+    }
 }
 
 export async function acceptOrDeclineRequest(email, status) {

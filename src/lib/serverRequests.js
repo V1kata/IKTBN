@@ -1,5 +1,4 @@
 import { supabaseAdmin } from "@/lib/supabaseAdminClient";
-
 export async function setInviteToEmail(email) {
     try {
         const { data, error } = await supabaseAdmin.auth.admin.inviteUserByEmail(email, {
