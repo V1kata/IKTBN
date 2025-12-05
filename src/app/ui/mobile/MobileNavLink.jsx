@@ -1,3 +1,5 @@
+import Link from "next/link"
+
 export default function MobileNavLink({ href, label, icon, setMenuOpen }) {
     return (
         <Link
